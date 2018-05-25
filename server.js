@@ -9,7 +9,7 @@ const blogListRouter = require('./blog-router');
 //set properties of packages
 app.use(morgan('common'));
 
-app.use('/blogs',blogListRouter);
+app.use('/blog-posts',blogListRouter);
 
 app.listen(process.env.PORT || 3000, () => {
     console.log(`Your app is listening on port ${process.env.PORT || 3000}`);
