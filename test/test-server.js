@@ -67,6 +67,6 @@ describe('Blog Posts', function () {
         })
         then(function(res) {
             expect(res).to.have.status(204);
-          });
+          }); 
     })
 })
