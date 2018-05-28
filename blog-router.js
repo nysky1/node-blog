@@ -9,6 +9,7 @@ const { BlogPosts } = require('./models');
 BlogPosts.create('Paceline - The Beginning', 'Once upon a time there was a man named Bill Smith', 'Jane Bishop', '5/24/2018')
 BlogPosts.create('Skyview Spirit Run', 'It is almost time for the 2018 Fund Run for Skyview Academy.', 'Jim Bishop', '5/1/2018')
 BlogPosts.create('Soccer for Kids', 'Get the ball rolling and sign up the kids for soccer.', 'Bob Bishop', '5/15/2018')
+BlogPosts.create('Solve the Cube!', 'You too can solve the Rubiks Cube.', 'Joe Bob Bishop', '5/15/2018')
 
 router.get('/', (req, res) => {
     res.json(BlogPosts.get());
