@@ -9,6 +9,10 @@ const blogListRouter = require('./blog-router');
 //set properties of packages
 app.use(morgan('common'));
 
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/views/index.html');
+});
+
 app.use('/blog-posts', blogListRouter);
 
 let server;
