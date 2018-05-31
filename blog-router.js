@@ -57,6 +57,7 @@ router.post('/', (req, res) => {
     BlogPosts
         .create(
             {
+                //const {title, author, content} = req.body
                 title: req.body.title,
                 author: req.body.author,
                 content: req.body.content
@@ -86,7 +87,7 @@ router.put('/:id', (req, res) => {
     });
     BlogPosts
         .findByIdAndUpdate(req.params.id, { $set: toUpdate })
-        .then(blog => res.status(204).end())
+        .then(blog => res.status(200).end())
         .catch(err => res.status(500).json({ message: `${req.method} - ${errorMessages.Error500}` }));
 });
 
