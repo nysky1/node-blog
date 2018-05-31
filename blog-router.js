@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
 const { BlogPosts } = require('./model');
+const errorMessages = require('./messages');
 
 router.get('/', (req, res) => {
     const filters = {};
@@ -22,7 +23,7 @@ router.get('/', (req, res) => {
         ))
         .catch(err => {
             console.error(err);
-            res.status(500).json({ message: 'BlogApp - Internal Server Error' })
+            res.status(500).json({ message: `${req.method} - ${errorMessages.Error500}` })
         });
 });
 
@@ -32,7 +33,7 @@ router.get('/:id', (req, res) => {
         .then(blog => res.json(blog.serialize()))
         .catch(err => {
             console.log(err);
-            res.status(500).json({ message: 'BlogApp - Internal Server Error' });
+            res.status(500).json({ message: `${req.method} - ${errorMessages.Error500}` });
         })
 });
 
@@ -40,7 +41,7 @@ router.delete('/:id', (req, res) => {
     BlogPosts
         .findByIdAndRemove(req.params.id)
         .then(blog => res.status(204).end())
-        .catch(err => res.send(500).json({ message: 'BlogApp - Internal Server Error' }));
+        .catch(err => res.send(500).json({ message: `${req.method} - ${errorMessages.Error500}` }));
 });
 
 router.post('/', (req, res) => {
@@ -64,11 +65,11 @@ router.post('/', (req, res) => {
         .then(blog => res.status(201).json(blog.serialize()))
         .catch(err => {
             console.log(err);
-            res.status(500).json({ message: 'Blog App: Internal Server Error' })
+            res.status(500).json({ message: `${req.method} - ${errorMessages.Error500}` })
         });
 });
 
-router.put('/:id', (req,res) => {
+router.put('/:id', (req, res) => {
     if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
         const message = (
             `Request path id (${req.params.id}) and request body id ` +
@@ -80,38 +81,13 @@ router.put('/:id', (req,res) => {
     const updateableFields = ['title', 'content', 'author'];
     updateableFields.forEach(field => {
         if (field in req.body) {
-          toUpdate[field] = req.body[field];
+            toUpdate[field] = req.body[field];
         }
-      });
+    });
     BlogPosts
-    .findByIdAndUpdate(req.params.id, {$set: toUpdate})
-    .then(blog => res.status(204).end())
-    .catch(err => res.status(500).json({message: 'BlogApp: Internal Server Error'}));
+        .findByIdAndUpdate(req.params.id, { $set: toUpdate })
+        .then(blog => res.status(204).end())
+        .catch(err => res.status(500).json({ message: `${req.method} - ${errorMessages.Error500}` }));
 });
-
-
-// router.put('/:id', jsonParser, (req, res) => {
-//     const requiredFields = ['title', 'content', 'author'];
-//     for (let i = 0; i < requiredFields.length; i++) {
-//         const field = requiredFields[i];
-//         if (!(field in req.body)) {
-//             const message = `Missing \`${field}\` in request body`
-//             console.error(message);
-//             return res.status(400).send(message);
-//         }
-//     };
-//     if (req.params.id !== req.body.id) {
-//         const message = `The body id doesn't match the path ${req.params.id}`;
-//         console.error(message);
-//         res.status(401).send(message);
-//     }
-//     console.log(`Updating blog post id: ${req.body.id}`);
-//     const {id, title, author, content, publishDate} = req.body;
-//     const updatedItem = BlogPosts.update( {
-//         //...req.body
-//         id, title, author, content, publishDate
-//     });
-//     res.status(200).end();
-// });
 
 module.exports = router;
