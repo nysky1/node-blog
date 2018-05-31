@@ -32,7 +32,7 @@ describe('Blog Posts', function () {
             })
     })
     it('should save item on POST', function () {
-        const newItem = { title: "Jim Test", content: "Lorem text", author: "Jim Bishop", publishDate: '1527508111868' };
+        const newItem = { title: "Jim Test", content: "Lorem text", author: {firstName: "Jim",lastName: "Bishop"} };
         return chai.request(app)
             .post('/blog-posts')
             .send(newItem)
@@ -41,11 +41,11 @@ describe('Blog Posts', function () {
                 expect(res).to.be.json;
                 expect(res.body).to.be.a('object');
                 expect(res.body.id).to.not.equal(null);
-                expect(res.body).to.deep.equal(Object.assign(newItem, { id: res.body.id }));
+                expect(res.body).to.deep.equal(Object.assign(newItem, { id: res.body.id, author: res.body.author }));
             })
     })
     it('should update item on PUT', function () {
-        const updateData = { title: "Blog Update", content: "Lorem 2", author: "Kate Smith" };
+        const updateData = { title: "Blog Update", content: "Lorem 2", author: {firstName: "Jim",lastName: "Bishop"} };
         return chai.request(app)
             .get('/blog-posts')
             .then(function(res) {
@@ -55,7 +55,7 @@ describe('Blog Posts', function () {
                 .send(updateData);
             })
             .then(function(res) {
-                expect(res).to.have.status(200);
+                expect(res).to.have.status(204);
                 expect(res.body).to.be.a('object');
             })
     })
